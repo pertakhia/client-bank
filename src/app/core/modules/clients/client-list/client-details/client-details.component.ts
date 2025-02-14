@@ -7,17 +7,20 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Client } from '../../../../interfaces/client';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../../../../../shared/component/error-dialog/error-dialog.component';
 @Component({
   selector: 'app-client-details',
-  imports: [ CommonModule, RouterLink, MatIcon, MatButtonModule ],
+  imports: [CommonModule, RouterLink, MatIcon, MatButtonModule, MatProgressSpinner],
   templateUrl: './client-details.component.html',
   styleUrl: './client-details.component.scss'
 })
-export class ClientDetailsComponent implements OnInit , OnDestroy {
+export class ClientDetailsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
-  private clientService = inject(ClientDetailsService);
+  private dialog = inject(MatDialog);
 
   public clientDetails = signal(<Client>{});
   public isLoading = signal(false);
@@ -25,18 +28,27 @@ export class ClientDetailsComponent implements OnInit , OnDestroy {
   constructor() { }
 
   ngOnInit() {
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
 
-      const clientId = Number(params['clientId']);
 
-      this.clientService.getClientDetails(clientId)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((client) => {
-          console.log(client);
-          this.clientDetails.set(client);
-          this.isLoading.set(false);
-        });
-    });
+    this.route.data.pipe(takeUntil(this.destroy$)).subscribe(
+      {
+        next: (data: any) => {
+          if (data.clientDetails) {
+            this.clientDetails.set(data.clientDetails);
+            this.isLoading.set(false);
+          } else {
+            this.isLoading.set(true);
+          }
+        },
+        error: (error) => {
+          console.log(error);
+          this.dialog.open(ErrorDialogComponent, {
+            data: { message: `${error.error}  ${error.message}` }
+          });
+        }
+      }
+    );
+
   }
 
   ngOnDestroy() {

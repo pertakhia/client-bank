@@ -112,7 +112,6 @@ export class ClientUpdateComponent {
     this.route.params.
       pipe(
         switchMap((params) => {
-          console.log('Query params:', params);
           const clientId = Number(params['clientId']);
 
           if (clientId) {
@@ -131,10 +130,8 @@ export class ClientUpdateComponent {
       subscribe({
         next: (clientDetails) => {
           if (clientDetails) {
-            console.log('Client details:', clientDetails);
             this.clientForm.patchValue(clientDetails);
 
-            console.log('Client ID:  ck', clientDetails.clientId);
 
             // disable client ID field
             this.clientForm.get('clientId')?.disable();
@@ -142,7 +139,6 @@ export class ClientUpdateComponent {
             this.clientId.set(clientDetails.id);
             this.addAccountButtonDisabled.set(false);
 
-            console.log('Accounts:', clientDetails.accounts);
 
             // **თუ ანგარიშები არსებობს, დაამატე**
             this.setAccounts(clientDetails.accounts || []);
@@ -188,6 +184,7 @@ export class ClientUpdateComponent {
     if (!this.originalAccounts[index]) {
       const accountsArray = this.clientForm.get('accounts') as FormArray;
       accountsArray.removeAt(index);
+      this.addAccountButtonDisabled.set(false);
     } else {
       // წინააღმდეგ შემთხვევაში, ვაბრუნებთ საწყის მონაცემებს
       account.reset(this.originalAccounts[index]);
@@ -200,13 +197,11 @@ export class ClientUpdateComponent {
 
   updateAccount(account: FormGroup, index: number) {
     if (account.valid) {
-      console.log('Account updated:', account.value);
 
       this.accountService.updateAccount(account.value).pipe(
         takeUntilDestroyed(this.destroyRef)
       ).subscribe({
         next: (updatedAccount) => {
-          console.log('Account updated successfully:', updatedAccount);
           // განახლების შემდეგ ღილაკი უნდა გაქრეს
           this.allowEditMap[index] = false;
           this.allowOnCancelMap[index] = false;
@@ -249,11 +244,11 @@ export class ClientUpdateComponent {
     // ახალ ანგარიშზე თავიდანვე ვუშვებთ "შენახვის" და "გაუქმების" ღილაკს
     this.allowSaveMap[newIndex] = true;
     this.allowOnCancelMap[newIndex] = true;
+    this.addAccountButtonDisabled.set(true);
   }
 
   removeAccount(account: any, index: number) {
 
-    console.log('Account removed:', account);
     const accountsArray = this.clientForm.get('accounts') as FormArray;
     accountsArray.removeAt(index);
 
@@ -264,13 +259,11 @@ export class ClientUpdateComponent {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
       next: () => {
-        console.log('Account deleted successfully');
         this.dialog.open(SuccessDialogComponent, {
           data: { message: 'ანგარიში წაიშალა!' }
         });
       },
       error: (error) => {
-        console.error('Error deleting account:', error);
         this.dialog.open(ErrorDialogComponent, {
           data: { message: `${error.error}  ${error.message}` }
         });
@@ -283,12 +276,10 @@ export class ClientUpdateComponent {
 
   // **ახალი ანგარიშის შენახვა**
   saveAccount(accountData: any, index: number) {
-    console.log('Account data:', accountData);
     this.accountService.postAccount(accountData.value).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
       next: (createdAccount) => {
-        console.log('Account created successfully:', createdAccount);
         this.addAccountButtonDisabled.set(false);
         this.allowSaveMap[index] = false;
         this.allowOnCancelMap[index] = false;
@@ -299,7 +290,6 @@ export class ClientUpdateComponent {
         this.realoadClient();
       },
       error: (error) => {
-        console.error('Error creating account:', error);
         this.dialog.open(ErrorDialogComponent, {
           data: { message: `${error.error}  ${error.message}` }
         });
@@ -325,13 +315,10 @@ export class ClientUpdateComponent {
 
   submitForm() {
     if (this.clientForm.valid) {
-      console.log('Form is valid', this.clientForm.value);
       let clientObj = { ...this.clientForm.value };
       delete clientObj.accounts;
-      console.log('Client data:', this.clientId());
       clientObj.id = Number(this.clientId());
 
-      console.log('Client data:', clientObj);
 
 
 
@@ -339,7 +326,6 @@ export class ClientUpdateComponent {
         takeUntilDestroyed(this.destroyRef)
       ).subscribe({
         next: (updatedClient) => {
-          console.log('Client updated successfully:', updatedClient);
           this.dialog.open(SuccessDialogComponent, {
             data: { message: 'კლიენტი წარმატებით განახლდა!' }
           });

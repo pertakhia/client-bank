@@ -1,48 +1,22 @@
 # ClientBank
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.5.
+version 19.1.5.
 
-## Development server
+## Development server json server-ის დასასტარტად გამოიყენეთ
+npm run server
 
-To start a local development server, run:
+## მომხამრებლის ავტორიზაციისთვის გამოიყენეთ
+email: admin@gmail.com
+password: admin
 
-```bash
-ng serve
-```
+## ანგულარის დასასტარტად გამოიყენეთ
+npm run start
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## პროექტში გამოყენებულია
+guards, resolver, reactive form, signal, animation
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
 
 ## Package.json აუცილებელი ეს ვერსია იყოს გამოყენებული
 "json-server": "^0.17.3"

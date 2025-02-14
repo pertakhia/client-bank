@@ -1,0 +1,52 @@
+/* Row-ის სტილი */
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Card-ის სტილი */
+  .card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 500px;
+    margin: 20px;
+  }
+  
+  /* Card-header სტილი */
+  .card-header {
+    background-color: #4caf50;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /* Card-body სტილი */
+  .card-body {
+    padding: 30px;
+    text-align: center;
+    font-size: 16px;
+  }
+  
+  /* პარა-გამორჩეული სტილი */
+  .card-body p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+    color: #333;
+  }
+  
+  /* მობილური მოწყობილობებისთვის responsive სტილი */
+  @media (max-width: 768px) {
+    .container {
+      padding: 10px;
+    }
+  
+    .card {
+      margin: 15px;
+    }
+  }

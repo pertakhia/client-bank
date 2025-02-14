@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth/auth.guard';
+import { clientDetailsResolver } from './core/guards/resolver/client-details.resolver';
 
 export const routes: Routes = [
     {
@@ -15,7 +16,10 @@ export const routes: Routes = [
     {
         path: 'clients/:clientId',
         loadComponent: () => import('./core/modules/clients/client-list/client-details/client-details.component').then(m => m.ClientDetailsComponent),
-        canActivate:[ authGuard ]
+        canActivate:[ authGuard ],
+        resolve: {
+            clientDetails:  clientDetailsResolver
+        }
     },
     {
         path: 'add-clients',

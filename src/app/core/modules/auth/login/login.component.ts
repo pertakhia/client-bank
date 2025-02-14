@@ -53,12 +53,10 @@ export class LoginComponent implements OnInit {
         .subscribe(
           response => {
             if (response.success) {
-              console.log('Login successful');
               // Redirect to clients page
               this.router.navigate(['/clients']);
             } else {
               // Show error message
-              console.log('Login failed');
               this.loginForm.controls['email'].setErrors({ 'incorrect': true });
               this.loginForm.controls['password'].setErrors({ 'incorrect': true });
             }

@@ -58,16 +58,16 @@ export class ClientListService {
   }
 
 
-  postClient(client: Client[]): Observable<any> {
-    return this.http.post(`${this.API_URL}${this.clientPath}`, client);
+  postClient(client: Client[]): Observable<Client> {
+    return this.http.post<Client>(`${this.API_URL}${this.clientPath}`, client);
   }
 
   deleteClient(clientId: number): Observable<any> {
     return this.http.delete(`${this.API_URL}${this.clientPath}/${clientId}`);
   }
 
-  updateClient(client: Client): Observable<any> {
-    return this.http.put(`${this.API_URL}${this.clientPath}/${client.id}`, client);
+  updateClient(client: Client): Observable<Client> {
+    return this.http.put<Client>(`${this.API_URL}${this.clientPath}/${client.id}`, client);
   }
   
 }

@@ -58,14 +58,12 @@ export class AccountFormComponent implements OnInit {
     // აქ შეგვიძლია გამოვიძახოთ მშობლის ფუნქცია ანგარიშის გაუქმებისთვის
     // დავუბრუნდეთ ტავდაპირველ მნიშვნელობას
     this.onCancel.emit();
-    console.log('Cancel');
   }
 
   saveAccount() {
     if (this.accountForm.valid) {
       this.saveAccountEvent.emit(this.accountForm.value);
     } else {
-      console.log('Invalid account form');
       // set error message
       this.accountForm.markAllAsTouched();
     }

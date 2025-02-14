@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Account } from '../../interfaces/account';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,8 @@ export class AccountsService {
   constructor() { }
 
 
-  postAccount(account: any): Observable<any> {
-    return this.http.post(`${this.API_URL}${this.accountPath}`, account);
+  postAccount(account: Account): Observable<Account> {
+    return this.http.post<Account>(`${this.API_URL}${this.accountPath}`, account);
   }
 
   updateAccount(account: any): Observable<any> {

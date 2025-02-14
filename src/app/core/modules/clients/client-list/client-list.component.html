@@ -1,8 +1,6 @@
-<section class="client-list-container">
+<section class="client-list-container"  @fadeInOut>
   <div class="client-list-header">
-
-
-    <div>
+    <div class="filter-sort-container">
       <!-- ფილტრის ველი -->
       <div class="filter-field">
         <mat-form-field appearance="outline">
@@ -73,7 +71,7 @@
     <ng-container matColumnDef="image">
       <th mat-header-cell *matHeaderCellDef>სურათი</th>
       <td mat-cell *matCellDef="let client">
-        <img [src]="client.photo  || 'assets/image.png'" alt="client image" width="50" height="50">
+        <img [src]="client.photo" alt="client image" width="50" height="50">
       </td>
     </ng-container>
 
@@ -81,13 +79,13 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>ქმედებები</th>
       <td mat-cell *matCellDef="let client">
-        <button mat-icon-button (click)="onEditClient(client.id)">
+        <button mat-icon-button (click)="onEditClient(client.id)" color="primary" class="action-button">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button (click)="onDeleteClient(client.id)"> 
+        <button mat-icon-button (click)="onDeleteClient(client.id)" color="warn" class="action-button"> 
           <mat-icon>delete</mat-icon>
         </button>
-        <button mat-icon-button (click)="onViewDetails(client.id)">
+        <button mat-icon-button (click)="onViewDetails(client.id)" color="accent" class="action-button">
           <mat-icon>details</mat-icon>
         </button>
       </td>

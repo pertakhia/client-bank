@@ -1,31 +1,76 @@
 @if(isLoading()){
-    <div>Loading...</div> <!-- Show loading state -->
+<div class="loading-container">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    <p>იტვირთება...</p>
+</div>
 } @else {
-    <h2>{{ clientDetails().firstName }} {{ clientDetails().lastName }}</h2>
+<div class="client-container">
+    <h1>კლიენტის დეტალები</h1>
+    <p><strong>სახელი:</strong>{{ clientDetails().firstName }} </p>
+    <p><strong>გვარი:</strong> {{ clientDetails().lastName }}</p>
+    <p><strong>სქესი:</strong> {{ clientDetails().gender }}</p>
     <p><strong>პირადი ნომერი:</strong> {{ clientDetails().personalNumber }}</p>
     <p><strong>ტელეფონი:</strong> {{ clientDetails().phoneNumber }}</p>
-    <p><strong>ქალაქი:</strong> {{ clientDetails()?.legalAddress?.city }}</p>
-    <p><strong>მისამართი:</strong> {{ clientDetails()?.legalAddress?.street }}</p>
 
-    <h3>ანგარიშები</h3>
+    <h3>
+        <mat-icon>location_on</mat-icon>
+        იურიდიული მისამართი
+    </h3>
+    <p><strong>ქვეყანა:</strong> {{ clientDetails().legalAddress?.country }}</p>
+    <p><strong>ქალაქი:</strong> {{ clientDetails().legalAddress?.city }}</p>
+    <p><strong>მისამართი:</strong> {{ clientDetails().legalAddress?.street }}</p>
+
+    <h3>
+        <mat-icon>location_on</mat-icon>
+        ფაქტიური მისამართი
+    </h3>
+    <p><strong>ქვეყანა:</strong> {{ clientDetails().actualAddress?.country }}</p>
+    <p><strong>ქალაქი:</strong> {{ clientDetails().actualAddress?.city }}</p>
+    <p><strong>მისამართი:</strong> {{ clientDetails().actualAddress?.street }}</p>
+
+    <div>
+        <h3>
+            <mat-icon>
+               image
+            </mat-icon>
+            სურათი
+        </h3>
+        <img [src]="clientDetails().photo" alt="client image" width="100" height="100">
+    </div>
+
+    <h3>
+        <mat-icon>account_balance</mat-icon>
+        ანგარიშები
+    </h3>
 
     @if(clientDetails().accounts?.length ){
-        <ul>
-            @for (account of clientDetails().accounts; track account.id){
-                <li>
-                    <p>ანგარიშის ნომერი: {{ account.clientId }}</p>
-                    <p>ტიპი: {{ account.type }}</p>
-                </li>
-            }
-        </ul>
-
+    <ul class="account-list">
+        @for (account of clientDetails().accounts; track account.id){
+        <li class="account-item">
+            <p><strong>ანგარიშის ნომერი:</strong> {{ account.accountNumber }}</p>
+            <p><strong>ტიპი:</strong> {{ account.type }}</p>
+            <p><strong>ვალუტა:</strong> {{ account.currency }}</p>
+            <p><strong>სტატუსი:</strong> {{ account.status }}</p>
+        </li>
+        }
+    </ul>
     } @else {
-        <p>ანგარიშები არ მოიძებნა</p>
+    <p class="no-accounts">
+        <mat-icon>info</mat-icon>
+        ანგარიშები არ მოიძებნა
+    </p>
     }
 
-    <button mat-fab extended routerLink="/clients">
-        <mat-icon>arrow_back</mat-icon>
-        დაბრუნება
-    </button>
-}
+    <div class="actions-btn-flex">
+        <button mat-fab extended routerLink="/clients" class="back-button">
+            <mat-icon>arrow_back</mat-icon>
+            დაბრუნება
+        </button>
 
+        <button mat-fab extended routerLink="/edit-clients/{{ clientDetails().id }}" class="edit-button">
+            <mat-icon>edit</mat-icon>
+            რედაქტირება
+        </button>
+    </div>
+</div>
+}

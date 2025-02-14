@@ -13,13 +13,37 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ConfirmDialogComponent } from '../../../../shared/component/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
+import { ErrorDialogComponent } from '../../../../shared/component/error-dialog/error-dialog.component';
 @Component({
   selector: 'app-client-list',
   imports: [
     NgFor, MatPaginatorModule, MatTableModule, MatSortModule, MatInputModule, MatSelectModule, MatButtonModule, MatIcon, RouterLink
   ],
   templateUrl: './client-list.component.html',
-  styleUrl: './client-list.component.scss'
+  styleUrl: './client-list.component.scss',
+  animations: [
+      trigger('fadeInOut', [
+        // landing page animation
+         state('void', style({
+            opacity: 1,
+            transform: 'translateX(0)'
+          })),
+          // transition from void to any state
+          // * => * is a wildcard
+          transition('void => *',
+          // animate for 1 second
+          animate('0.6s', 
+          // keyframes for animation
+          keyframes([
+            // rotate 0 at 0%
+            style({ opacity: 0, transform: 'translateY(24px)', offset: 0}),
+            // rotate 0 at 50%
+            style({ opacity: 1, transform: 'translateY(0)', offset: 1}),
+          ]))),
+  
+      ]),
+    ]
 })
 export class ClientListComponent implements OnInit {
   clientService = inject(ClientListService);
@@ -67,7 +91,10 @@ export class ClientListComponent implements OnInit {
           this.totalClients.set(response.totalCount);
         },
         error: (error) => {
-          console.error('Error fetching clients', error);
+          console.error('Error loading clients:', error);
+          this.dialog.open(ErrorDialogComponent, {
+            data: { message: `${error.error}  ${error.message}` }
+          });
         },
       });
   }

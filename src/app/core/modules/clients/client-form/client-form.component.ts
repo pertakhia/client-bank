@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -18,6 +18,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from '../../../../shared/component/success-dialog/success-dialog.component';
 import { ErrorDialogComponent } from '../../../../shared/component/error-dialog/error-dialog.component';
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
+
 
 @Component({
   selector: 'app-client-form',
@@ -27,20 +29,45 @@ import { ErrorDialogComponent } from '../../../../shared/component/error-dialog/
     AccountFormComponent,
     MatDialogModule],
   templateUrl: './client-form.component.html',
-  styleUrl: './client-form.component.scss'
+  styleUrl: './client-form.component.scss',
+  animations: [
+    trigger('fadeInOut', [
+      // landing page animation
+       state('void', style({
+          opacity: 1,
+          transform: 'translateX(0)'
+        })),
+        // transition from void to any state
+        // * => * is a wildcard
+        transition('void => *',
+        // animate for 1 second
+        animate('0.8s', 
+        // keyframes for animation
+        keyframes([
+          // rotate 0 at 0%
+          style({ opacity: 0, transform: 'translateY(48px)', offset: 0}),
+          // rotate 0 at 50%
+          style({ opacity: 1, transform: 'translateY(0)', offset: 1}),
+        ]))),
+
+    ]),
+  ]
 })
 export class ClientFormComponent implements OnInit, OnDestroy {
   private formBuilder = inject(FormBuilder);
   private dialog = inject(MatDialog);
   public clientService = inject(ClientListService);
   public accountService = inject(AccountsService);
+  private destroy$ = new Subject<void>();
+  private cdr = inject(ChangeDetectorRef)
+  destroyRef = inject(DestroyRef);
+  animationState = 'void';
+
 
   clientForm!: FormGroup;
   genders = signal(['კაცი', 'ქალი']);
   selectedPhoto: string | ArrayBuffer | null = null; // Base64 ფოტოს შენახვა
   clientId = signal(''); // კლიენტის ID
-  private destroy$ = new Subject<void>();
-  destroyRef = inject(DestroyRef);
   addAccountButtonDisabled = signal(false);
 
 
@@ -91,7 +118,6 @@ export class ClientFormComponent implements OnInit, OnDestroy {
     this.clientForm.get('clientId')?.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
-        console.log('Client ID changed:', value);
         this.clientId.set(value);
       });
   }
@@ -104,7 +130,7 @@ export class ClientFormComponent implements OnInit, OnDestroy {
     return this.clientForm.get('accounts') as FormArray;
   }
 
-  
+
 
   addAccount() {
     const accountForm = this.formBuilder.group({
@@ -115,7 +141,6 @@ export class ClientFormComponent implements OnInit, OnDestroy {
       accountNumber: ['', [Validators.required, Validators.pattern(/^\d+$/)]] // მხოლოდ ციფრები
     });
 
-    console.log('Account added:', accountForm.value);
 
     this.accounts.push(accountForm);
     this.addAccountButtonDisabled.set(true);
@@ -152,11 +177,8 @@ export class ClientFormComponent implements OnInit, OnDestroy {
 
       this.clientService.postClient(clientObj).pipe(
         switchMap((createdClient) => {
-          console.log('Client created successfully:', createdClient);
           return this.accountService.postAccount(accountObj).pipe(
             catchError((accountError) => {
-              console.error('Error creating account:', accountError);
-              console.log('Deleting client due to account creation failure:', createdClient.id);
               // თუ ანგარიშის შექმნა ჩავარდა, ვშლით უკვე დამატებულ კლიენტს
               return this.clientService.deleteClient(createdClient.id).pipe(
                 tap(() => console.log('Client deleted due to account creation failure')),
@@ -168,18 +190,35 @@ export class ClientFormComponent implements OnInit, OnDestroy {
         takeUntilDestroyed(this.destroyRef)
       ).subscribe({
         next: () => {
-          console.log('Account created successfully');
           // წარმატებული ოპერაციების შემდეგ ვასუფთავებთ ფორმას
-          this.clientForm.reset({}, { emitEvent: false });
-          this.selectedPhoto = null;
-          this.accounts.clear();
-          this.addAccountButtonDisabled.set(false);
-          this.dialog.open(SuccessDialogComponent, {
+
+          const dialogRef = this.dialog.open(SuccessDialogComponent, {
             data: { message: 'კლიენტი და ანგარიში წარმატებით დაემატა!' }
           });
+
+          dialogRef.afterClosed()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(() => {
+              setTimeout(() => {
+                this.clientForm.reset();
+
+                // აქ ვამოწმებთ, რომ `accounts` ველი კვლავ ინიციალიზებული იყოს
+                if (!this.clientForm.get('accounts')) {
+                  this.clientForm.setControl('accounts', new FormArray([]));
+                } else {
+                  (this.clientForm.get('accounts') as FormArray).clear(); // თუ არსებობს, ვასუფთავებთ
+                }
+
+                this.clientForm.markAsPristine();
+                this.clientForm.markAsUntouched();
+                this.clientForm.updateValueAndValidity({ onlySelf: true });
+
+                this.selectedPhoto = null;
+                this.addAccountButtonDisabled.set(false);
+              }, 0);
+            });
         },
         error: (error) => {
-          console.error('Transaction failed:', error);
           this.dialog.open(ErrorDialogComponent, {
             data: { message: `${error.error}  ${error.message}` }
           });

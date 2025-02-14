@@ -1,0 +1,47 @@
+.client-table, .account-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+  }
+  
+  .client-table th, .client-table td,
+  .account-table th, .account-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .client-table th {
+    background-color: #f4f4f4;
+  }
+  
+  button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #ddd;
+  }
+  
+
+  .client-list-container {
+    padding: 20px 40px;
+  }
+
+  .filter-field {
+    display: inline;
+  }
+
+  .sort-field {
+    display: inline;
+    margin: 0 20px;
+  }
+
+  .client-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }

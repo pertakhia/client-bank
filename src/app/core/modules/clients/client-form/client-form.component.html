@@ -1,0 +1,233 @@
+<mat-card>
+    <mat-card-title class="section-title mat-card-title">
+        <mat-icon>person_add</mat-icon>
+        კლიენტის რეგისტრაცია</mat-card-title>
+    <mat-divider></mat-divider>
+
+    <form [formGroup]="clientForm" (ngSubmit)="submitForm()">
+
+        <!--  პირადი ინფორმაცია -->
+        <h3 class="section-title">
+            <mat-icon>person</mat-icon>
+            პირადი ინფორმაცია
+        </h3>
+        <div class="form-group">
+            <mat-form-field appearance="outline">
+                <mat-label>კლიენტის ნომერი</mat-label>
+                <input matInput formControlName="clientId" type="number" required class="no-spinner">
+                @if(this.clientForm.controls['clientId'].hasError('required')){<mat-error>
+                    კლიენტის ნომერი აუცილებელია
+                </mat-error>}
+                @if(clientForm.controls['clientId'].hasError('pattern')){
+                <mat-error>
+                    კლიენტის ნომერი უნდა იყოს რიცხვი
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>პირადი ნომერი</mat-label>
+                <input matInput formControlName="personalNumber" required>
+                @if(this.clientForm.controls['personalNumber'].hasError('required')){<mat-error>
+                    პირადი ნომერი აუცილებელია
+                </mat-error>}
+                @if(clientForm.controls['personalNumber'].hasError('pattern')){
+                <mat-error>
+                    პირადი ნომერი უნდა იყოს 11 ციფრი
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>სახელი</mat-label>
+                <input matInput formControlName="firstName" required>
+                @if(this.clientForm.controls['firstName'].hasError('required')){<mat-error>
+                    სახელი აუცილებელია
+                </mat-error>}
+                @if(clientForm.controls['firstName'].hasError('pattern')){
+                <mat-error>
+                    შეიცავდეს მხოლოდ ქართული ან ლათინური ანბანის ასოებს,
+                </mat-error>
+                }
+                @if(clientForm.controls['firstName'].hasError('minlength')){
+                <mat-error>
+                    სახელი უნდა იყოს მინიმუმ 2 სიმბოლო
+                </mat-error>
+                }
+                @if(clientForm.controls['firstName'].hasError('maxlength')){
+                <mat-error>
+                    სახელი უნდა იყოს მაქსიმუმ 50 სიმბოლო
+                </mat-error>
+                }
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>გვარი</mat-label>
+                <input matInput formControlName="lastName" required>
+                @if(this.clientForm.controls['lastName'].hasError('required')){<mat-error>
+                    გვარი აუცილებელია
+                </mat-error>}
+                @if(clientForm.controls['lastName'].hasError('pattern')){
+                <mat-error>
+                    შეიცავდეს მხოლოდ ქართული ან ლათინური ანბანის ასოებს
+                </mat-error>
+                }
+                @if(clientForm.controls['lastName'].hasError('minlength')){
+                <mat-error>
+                    გვარი უნდა იყოს მინიმუმ 2 სიმბოლო
+                </mat-error>
+                }
+                @if(clientForm.controls['lastName'].hasError('maxlength')){
+                <mat-error>
+                    გვარი უნდა იყოს მაქსიმუმ 50 სიმბოლო
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>სქესი</mat-label>
+                <mat-select formControlName="gender" required>
+                    <mat-option *ngFor="let gender of genders()" [value]="gender">{{ gender }}</mat-option>
+                </mat-select>
+                @if(clientForm.controls['gender'].hasError('required')){
+                    <mat-error>
+                        სქესი აუცილებელია
+                    </mat-error>
+                    }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>
+                    <mat-icon>
+                        phone
+                    </mat-icon>
+                    მობილური</mat-label>
+                <input matInput formControlName="phoneNumber" required>
+                @if(this.clientForm.controls['phoneNumber'].hasError('required')){<mat-error>
+                    ტელეფონი აუცილებელია
+                </mat-error>}
+                @if(clientForm.controls['phoneNumber'].hasError('pattern')){
+                <mat-error>უნდა იწყებოდეს 5 და რაოდენობა უნდა იყოს 9</mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!--  მისამართები -->
+        <h3 class="section-title">
+            <mat-icon>location_on</mat-icon>
+            მისამართები
+        </h3>
+
+        <h4 class="section-title">
+            <mat-icon>home</mat-icon>
+            იურიდიული მისამართი
+        </h4>
+        <div formGroupName="legalAddress" class="form-group">
+            <mat-form-field appearance="outline">
+                <mat-label>ქვეყანა</mat-label>
+                <input matInput formControlName="country" required>
+                @if(clientForm.get('legalAddress')?.get('country')?.hasError('required')){<mat-error>
+                    ქვეყანა აუცილებელია
+                </mat-error>}
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>ქალაქი</mat-label>
+                <input matInput formControlName="city" required>
+                @if(clientForm.get('legalAddress')?.get('city')?.hasError('required')){<mat-error>
+                    ქალაქი აუცილებელია
+                </mat-error>}
+
+               
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>მისამართი</mat-label>
+                <input matInput formControlName="street" required>
+                @if(clientForm.get('legalAddress')?.get('street')?.hasError('required')){<mat-error>
+                    მისამართი აუცილებელია
+                </mat-error>}
+            </mat-form-field>
+        </div>
+
+        <h4 class="section-title">
+            <mat-icon>home</mat-icon>
+            ფაქტიური მისამართი
+        </h4>
+        <div formGroupName="actualAddress" class="form-group">
+            <mat-form-field appearance="outline">
+                <mat-label>ქვეყანა</mat-label>
+                <input matInput formControlName="country" required>
+                @if(clientForm.get('actualAddress')?.get('country')?.hasError('required')){<mat-error>
+                    ქვეყანა აუცილებელია
+                </mat-error>}
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>ქალაქი</mat-label>
+                <input matInput formControlName="city" required>
+                @if(clientForm.get('actualAddress')?.get('city')?.hasError('required')){<mat-error>
+                    ქალაქი აუცილებელია
+                </mat-error>}
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>მისამართი</mat-label>
+                <input matInput formControlName="street" required>
+                @if(clientForm.get('actualAddress')?.get('street')?.hasError('required')){<mat-error>
+                    მისამართი აუცილებელია
+                </mat-error>}
+            </mat-form-field>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <h3 class="section-title">
+            <mat-icon>photo</mat-icon>
+            ფოტოს ატვირთვა
+        </h3>
+
+        <div class="photo-upload" (click)="fileInput.click()">
+            <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" required>
+            <label>აირჩიეთ ფოტო</label>
+            <p>
+                დააჭირეთ ან გადაათრიეთ ფაილი</p>
+        </div>
+
+        <div class="photo-preview" *ngIf="selectedPhoto">
+            <img [src]="selectedPhoto" alt="ფოტო">
+        </div>
+
+        <mat-divider></mat-divider>
+
+
+        <!-- ანგარიშის დამატება -->
+        <h3 class="section-title">
+            <mat-icon>account_balance</mat-icon>
+            ანგარიშის დამატება
+        </h3>
+        <p>კლიენტის შექმნისას თავიდან თქვენ შეგიძლიათ შექმნათ მხოლოდ ერთი ანგარიში, შექმნიშ შემდეგ კი დაამატოთ მას რამდენიც გინდათ.</p>
+        
+        <div formArrayName="accounts">
+            <div *ngFor="let account of accounts.controls; let i = index"  >
+                <app-account-form [accountForm]="account" (removeAccount)="removeAccount(i)"></app-account-form>
+            </div>
+        </div>
+        
+        <button mat-raised-button color="accent" (click)="addAccount()"  type="button"  [disabled]="this.addAccountButtonDisabled()">
+            <mat-icon>add</mat-icon> ანგარიშის დამატება
+        </button>
+
+        <!--  ღილაკი -->
+        <button mat-raised-button color="primary" type="submit" [disabled]="clientForm.invalid  || accounts.controls.length === 0">
+            <mat-icon>
+                person_add
+            </mat-icon>
+            რეგისტრაცია
+        </button>
+
+    </form>
+</mat-card>

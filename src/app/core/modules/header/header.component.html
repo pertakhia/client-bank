@@ -1,0 +1,44 @@
+<header class="nav_header ">
+    <ul class="nav_list container">
+        <div>
+            <a href="" routerLink="/">
+                <li>
+                    logo
+                </li>
+            </a>
+        </div>
+        <div class="nav_links">
+            <a class="nav_items" routerLink="/clients">
+                <li>
+                    clients
+                </li>
+            </a>
+
+            @if(!authService.isLogged()) {
+            <a class="nav_items" routerLink="/login">
+                <li>
+                    <button mat-raised-button> login</button>
+                </li>
+            </a>
+            }
+            @if(authService.isLogged()) {
+            <a href="">
+                <li class="dropdown-container">
+                    <button mat-raised-button class="profile_btn"> profile </button>
+                    <div class="dropdown">
+                        <ul class="dropdown-list">
+                            <li class="dropdown-item">
+                                <a href="" routerLink="/profile">profile</a>
+                            </li>
+                            <li class="dropdown-item" (click)="authService.logout()">
+                                logout
+                            </li>
+                        </ul>
+                    </div>
+
+                </li>
+            </a>
+            }
+        </div>
+    </ul>
+</header>

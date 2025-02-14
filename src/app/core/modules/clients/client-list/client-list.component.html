@@ -1,0 +1,103 @@
+<section class="client-list-container">
+  <div class="client-list-header">
+
+
+    <div>
+      <!-- ფილტრის ველი -->
+      <div class="filter-field">
+        <mat-form-field appearance="outline">
+          <mat-label>ფილტრი</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="სახელი, გვარი, ტელეფონი...">
+        </mat-form-field>
+      </div>
+
+      <!-- სორტირების ველი -->
+      <div class="sort-field">
+        <mat-form-field appearance="outline">
+          <mat-label>სორტირება</mat-label>
+          <mat-select (selectionChange)="onSortChange($event.value.field, $event.value.order)">
+            <mat-option [value]="{ field: 'firstName', order: 'asc' }">სახელი (A-Z)</mat-option>
+            <mat-option [value]="{ field: 'firstName', order: 'desc' }">სახელი (Z-A)</mat-option>
+            <mat-option [value]="{ field: 'lastName', order: 'asc' }">გვარი (A-Z)</mat-option>
+            <mat-option [value]="{ field: 'lastName', order: 'desc' }">გვარი (Z-A)</mat-option>
+            <mat-option [value]="{ field: 'phoneNumber', order: 'asc' }">ტელეფონი (A-Z)</mat-option>
+            <mat-option [value]="{ field: 'phoneNumber', order: 'desc' }">ტელეფონი (Z-A)</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+      <button mat-fab extended (click)="resetFilters()">
+        <mat-icon>refresh</mat-icon>გასუფთავება
+      </button>
+    </div>
+    <!-- ახალი კლიენტის დამატება -->
+    <button mat-fab extended  routerLink="/add-clients">
+      <mat-icon>add</mat-icon>
+      დაამატე ახალი კლიენტი
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="clientsList()" matSort>
+    <!-- სახელი -->
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>სახელი</th>
+      <td mat-cell *matCellDef="let client">{{ client.firstName }}</td>
+    </ng-container>
+
+    <!-- გვარი -->
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>გვარი</th>
+      <td mat-cell *matCellDef="let client">{{ client.lastName }}</td>
+    </ng-container>
+
+    <!-- ტელეფონი -->
+    <ng-container matColumnDef="phoneNumber">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ტელეფონი</th>
+      <td mat-cell *matCellDef="let client">{{ client.phoneNumber }}</td>
+    </ng-container>
+
+    <!-- ანგარიშები -->
+    <ng-container matColumnDef="accounts">
+      <th mat-header-cell *matHeaderCellDef>ანგარიშები</th>
+      <td mat-cell *matCellDef="let client">
+        <ul>
+          <li *ngFor="let account of client.accounts">
+            {{ account.type }} - {{ account.currency }} ({{ account.status }})
+          </li>
+        </ul>
+      </td>
+    </ng-container>
+
+    <!-- სურათი -->
+    <ng-container matColumnDef="image">
+      <th mat-header-cell *matHeaderCellDef>სურათი</th>
+      <td mat-cell *matCellDef="let client">
+        <img [src]="client.photo  || 'assets/image.png'" alt="client image" width="50" height="50">
+      </td>
+    </ng-container>
+
+    <!-- ქმედებები -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>ქმედებები</th>
+      <td mat-cell *matCellDef="let client">
+        <button mat-icon-button (click)="onEditClient(client.id)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="onDeleteClient(client.id)"> 
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-icon-button (click)="onViewDetails(client.id)">
+          <mat-icon>details</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['firstName', 'lastName', 'phoneNumber', 'accounts','image', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['firstName', 'lastName', 'phoneNumber', 'accounts', 'image', 'actions'];"></tr>
+  </table>
+
+  <!-- Material Paginator -->
+  <mat-paginator [length]="totalClients()" [pageSize]="pageSize()" [pageSizeOptions]="[5, 10, 25, 100]"
+    (page)="onPageChange($event)" [showFirstLastButtons]="true"></mat-paginator>
+</section>

@@ -1,0 +1,58 @@
+.nav_header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+    background-color: var(--primary);
+    width: 100%;
+}
+
+
+.nav_list {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.nav_links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.nav_items {
+    cursor: pointer;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    background: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px;
+    right: 0;
+    top: 40px; /* დაყენება ღილაკის ქვემოთ */
+    z-index: 100;
+}
+
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+   
+}
+
+/* dropdown გამოჩნდება მხოლოდ მაშინ, როცა profile_btn-ზე მიიტანთ მაუსს */
+.profile_btn:hover + .dropdown,
+.dropdown:hover {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+    cursor: pointer;
+}

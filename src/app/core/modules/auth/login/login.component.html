@@ -1,0 +1,49 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Login</h3>
+                    </div>
+                    <div class="card-body">
+                        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                            <div >
+
+                                <mat-form-field class="example-full-width"  appearance="outline">
+                                    <mat-label for="email"> Email</mat-label>
+                                    <input matInput type="email" class="form-control" formControlName="email" id="email"
+                                        placeholder="Enter email">
+                                    @if(this.loginForm.controls['email'].hasError('required')) { <mat-error>
+                                        Email is required
+                                    </mat-error>
+                                    }
+                                    @if(this.loginForm.controls['email'].hasError('incorrect')) { <mat-error>
+                                        Email is incorect
+                                    </mat-error>
+                                    }
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field class="example-full-width"  appearance="outline">
+                                    <mat-label for="password"> Password</mat-label>
+                                    <input matInput type="password" class="form-control" formControlName="password"
+                                        id="password" placeholder="Password">
+                                    @if(this.loginForm.controls['password'].hasError('required')) { <mat-error>
+                                        Password is required
+                                    </mat-error>
+                                    }
+                                    @if(this.loginForm.controls['password'].hasError('incorrect')) { <mat-error>
+                                        Password is incorect
+                                    </mat-error>
+                                    }
+                                </mat-form-field>
+                            </div>
+                            <button type="submit" mat-stroked-button>Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

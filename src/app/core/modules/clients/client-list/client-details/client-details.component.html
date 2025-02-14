@@ -1,0 +1,31 @@
+@if(isLoading()){
+    <div>Loading...</div> <!-- Show loading state -->
+} @else {
+    <h2>{{ clientDetails().firstName }} {{ clientDetails().lastName }}</h2>
+    <p><strong>პირადი ნომერი:</strong> {{ clientDetails().personalNumber }}</p>
+    <p><strong>ტელეფონი:</strong> {{ clientDetails().phoneNumber }}</p>
+    <p><strong>ქალაქი:</strong> {{ clientDetails()?.legalAddress?.city }}</p>
+    <p><strong>მისამართი:</strong> {{ clientDetails()?.legalAddress?.street }}</p>
+
+    <h3>ანგარიშები</h3>
+
+    @if(clientDetails().accounts?.length ){
+        <ul>
+            @for (account of clientDetails().accounts; track account.id){
+                <li>
+                    <p>ანგარიშის ნომერი: {{ account.clientId }}</p>
+                    <p>ტიპი: {{ account.type }}</p>
+                </li>
+            }
+        </ul>
+
+    } @else {
+        <p>ანგარიშები არ მოიძებნა</p>
+    }
+
+    <button mat-fab extended routerLink="/clients">
+        <mat-icon>arrow_back</mat-icon>
+        დაბრუნება
+    </button>
+}
+

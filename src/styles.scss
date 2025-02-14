@@ -1,0 +1,257 @@
+/* You can add global styles to this file, and also import other style files */
+
+@use '@angular/material' as mat;
+$accentPalette: (
+    50: #f3e5f5,
+    100: #e1bee7,
+    200: #ce93d8,
+    300: #ba68c8,
+    400: #ab47bc,
+    500: #9c27b0,
+    600: #8e24aa,
+    700: #7b1fa2,
+    800: #6a1b9a,
+    900: #4a148c,
+    A100: #ea80fc,
+    A200: #e040fb,
+    A400: #d500f9,
+    A700: #aa00ff,
+    contrast: (50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #ffffff,
+        A400: #ffffff,
+        A700: #ffffff)
+);
+
+$primaryPalette: (
+    50: #e8f5e9,
+    100: #c8e6c9,
+    200: #a5d6a7,
+    300: #81c784,
+    400: #66bb6a,
+    500: #4caf50,
+    600: #43a047,
+    700: #388e3c,
+    800: #2e7d32,
+    900: #1b5e20,
+    A100: #b9f6ca,
+    A200: #69f0ae,
+    A400: #00e676,
+    A700: #00c853,
+    contrast: (50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #ffffff)
+);
+
+$warnPalette: (
+    50: #FF9494,
+    100: #FF6161,
+    200: #FF5252,
+    300: #FF3D3D,
+    400: #ff1a1a,
+    500: #FF1A1A,
+    600: #e60000,
+    700: #ff1a1a,
+    800: #e60000,
+    900: #cc0000,
+    A100: #cc0000,
+    A200: #cc0000,
+    A400: #cc0000,
+    A700: #cc0000,
+    contrast: (50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #000000,
+        600: #000000,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    ),
+);
+
+// import mat-core mixin
+
+@include mat.core();
+
+$cleint-primary: mat.m2-define-palette($primaryPalette, 500);
+$cleint-accent: mat.m2-define-palette($accentPalette, 500);
+$cleint-warn: mat.m2-define-palette($warnPalette, 500);
+
+$client-theme: mat.m2-define-light-theme((color: (primary: $cleint-primary,
+                accent: $cleint-accent,
+                warn: $cleint-warn,
+            ),
+        ));
+
+@include mat.all-component-themes($client-theme);
+
+
+
+
+
+:root {
+    --primary: #4caf50;
+    --accent: #9c27b0;
+    --warn: #ff1a1a;
+}
+
+
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+li {
+    list-style-type: none;
+
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+.container {
+    max-width: 1152px;
+    margin: 0 auto;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .mat-card-title {
+    margin-bottom: 1rem;
+  }
+  
+  mat-card {
+    max-width: 700px;
+    margin:30px auto;
+    padding: 2rem;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .mat-form-field {
+    width: 100%;
+  }
+  
+
+  
+  .form-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .full-width {
+    grid-column: span 2;
+  }
+  
+  button {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .photo-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #aaa;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  
+  .photo-upload:hover {
+    border-color: #2196f3;
+    background-color: rgba(33, 150, 243, 0.1);
+  }
+  
+  .photo-upload input {
+    display: none;
+  }
+  
+  .photo-upload label {
+    padding: 10px 20px;
+    background-color: #2196f3;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .photo-upload label:hover {
+    background-color: #1976d2;
+  }
+  
+  .photo-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+  }
+  
+  .photo-preview img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #2196f3;
+    padding: 5px;
+  }
+
+  .no-spinner {
+    --moz-appearance: textfield; /* Firefox */
+  }
+  
+  .no-spinner::-webkit-outer-spin-button,
+  .no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* Chrome, Safari, Edge */
+    margin: 0;
+  }
+  
+  
+  @media (max-width: 600px) {
+    .form-group {
+      grid-template-columns: 1fr;
+    }
+  }

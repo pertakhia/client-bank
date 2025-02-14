@@ -1,0 +1,52 @@
+<div [formGroup]="accountForm" class="account-form">
+    <mat-form-field appearance="outline">
+        <mat-label>ანგარიშის ტიპი</mat-label>
+        <mat-select formControlName="type">
+            <mat-option *ngFor="let type of accountTypes" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label> ანგარიშის ნომერი </mat-label>
+        <input matInput formControlName="accountNumber" type="number" required class="no-spinner" >
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>ვალუტა</mat-label>
+        <mat-select formControlName="currency">
+            <mat-option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>სტატუსი</mat-label>
+        <mat-select formControlName="status">
+            <mat-option *ngFor="let status of statuses" [value]="status">{{ status }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline">
+        <mat-label>Client ID</mat-label>
+        <input matInput formControlName="clientId" readonly>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" *ngIf="allowSave" type="button" (click)="saveAccount()">
+        <mat-icon>save</mat-icon> შენახვა
+    </button>
+
+    <button mat-raised-button color="accent" *ngIf="allowEdit" type="button" (click)="updateAccount()">
+        <mat-icon>edit</mat-icon> განახლება
+    </button>
+    
+
+    <button mat-raised-button color="warn" (click)="onCancle()" type="button" *ngIf="allowOnCancel">
+        <mat-icon>remove</mat-icon> გაუქმება 
+    </button>
+
+
+
+    <button mat-button color="warn" (click)="onRemove()" type="button" *ngIf="allowRemove">
+        <mat-icon>delete</mat-icon> წაშლა
+    </button>
+</div>

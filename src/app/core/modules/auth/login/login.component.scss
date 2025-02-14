@@ -1,0 +1,32 @@
+.card {
+    width: 400px;
+    margin: 0 auto;
+    margin-top: 100px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    text-align: center;
+}
+
+.card-header {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.card-body {
+    margin-bottom: 20px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.mat-mdc-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+}
